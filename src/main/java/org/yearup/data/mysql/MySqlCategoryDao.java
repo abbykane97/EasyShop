@@ -104,7 +104,19 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     }
 
         // update category
-    
+        @Override
+        public void delete(int categoryId) {
+            String sql = "DELETE FRIM categories WHERE category_id = ?";
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, categoryId);
+                statement.executeUpdate();
+            }
+            catch (SQLException e) {
+                throw new RuntimeException("Error deleting category with id" + categoryId, e);
+            }
+
+        }
 
     @Override
     public void update(Category category) {
