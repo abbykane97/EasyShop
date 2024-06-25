@@ -3,8 +3,11 @@ package org.yearup.data.mysql;
 import org.springframework.stereotype.Component;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
+import org.yearup.models.Product;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,13 +26,32 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // get all categories
         return null;
     }
+        @Override
+        public Category getById(int categoryId)
+        {
+            String sql = "SELECT * FROM products WHERE product_id = ?";
+            try (Connection connection = getConnection())
+            {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, categoryId);
 
-    @Override
-    public Category getById(int categoryId)
-    {
+                ResultSet row = statement.executeQuery();
+
+                if (row.next())
+                {
+                    return mapRow(row);
+                }
+            }
+            catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
+
+
         // get category by id
-        return null;
-    }
+    
 
     @Override
     public Category create(Category category)
@@ -50,6 +72,12 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         // delete category
     }
 
+    @Override
+    public void update(Category category) {
+
+    }
+
+
     private Category mapRow(ResultSet row) throws SQLException
     {
         int categoryId = row.getInt("category_id");
@@ -67,3 +95,4 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     }
 
 }
+
