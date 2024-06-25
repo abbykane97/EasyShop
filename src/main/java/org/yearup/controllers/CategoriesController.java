@@ -97,8 +97,18 @@ public class CategoriesController
     // add annotation to ensure that only an ADMIN can call this function
 
 
+    @PutMapping("{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
+        try
+        {
+            categoryDao.update(category);
+        }
+        catch(Exception ex)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
         // update the category by id
     }
 
