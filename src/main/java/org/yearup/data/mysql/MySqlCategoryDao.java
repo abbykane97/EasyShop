@@ -16,6 +16,7 @@ import java.util.List;
 
 @Component
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
+
     public MySqlCategoryDao(DataSource dataSource) {
         super(dataSource);
     }
@@ -103,17 +104,15 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     }
 
         // update category
-
-    @Override
-    public void delete(int categoryId)
-    {
-        // delete category
-    }
+    
 
     @Override
     public void update(Category category) {
 
     }
+
+    // delete category
+
 
 
     private Category mapRow(ResultSet row) throws SQLException
