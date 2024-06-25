@@ -18,7 +18,7 @@ import java.util.List;
 // add annotation to allow cross site origin requests
 
 @RestController
-@RequestMapping(path = "/categories", method = RequestMethod.GET)
+@RequestMapping(path = "/categories")
 @CrossOrigin
 
 public class CategoriesController
@@ -45,22 +45,16 @@ public class CategoriesController
     // add the appropriate annotation for a get action
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
-    public Category getById(@PathVariable int id )
-    {
-        try
-        {
+    public Category getById(@PathVariable int id ) {
+
             var category = categoryDao.getById(id);
 
-            if(category == null)
+            if (category == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
             return category;
         }
-        catch(Exception ex)
-        {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
-    }
+
         // get the category by id)
 
 
@@ -81,6 +75,7 @@ public class CategoriesController
 
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category)
     {
             try
@@ -120,6 +115,7 @@ public class CategoriesController
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id)
     {
         try
